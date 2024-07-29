@@ -1,47 +1,81 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref, watch } from 'vue';
+
+const num1 = ref(0);
+const num2 = ref(0);
+const operacao = ref('+');
+const resultado = ref(0);
+
+watch([num1, num2, operacao], () => {
+  calcular();
+});
+
+function calcular() {
+  switch (operacao.value) {
+    case '+':
+      resultado.value = num1.value + num2.value;
+      break;
+    case '-':
+      resultado.value = num1.value - num2.value;
+      break;
+    case '*':
+      resultado.value = num1.value * num2.value;
+      break;
+    case '/':
+      if (num2.value !== 0) {
+        resultado.value = num1.value / num2.value;
+      } else {
+        resultado.value = 'Erro: divisão por zero';
+      }
+      break;
+  }
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div class="container" id="calculadora">
+    <header class="p-5 mb-4 mt-4 bg-light rounded-3">
+      <h1>Calculadora Aritmética</h1>
+    </header>
+    <form>
+      <div class="row">
+        <div class="col md-2">
+          <input  type="number" v-model.number="num1" placeholder="Digite um valor númerico" class="form-control">
+        </div>
+        <div class="col md-2">
+          <select v-model="operacao" class="form-control">
+            <option value="+">adição</option>
+            <option value="-">subtração</option>
+            <option value="*">multiplicação</option>
+            <option value="/">divisão</option>
+          </select>
+        </div>
+        <div class="col md-2">
+          <input  type="number" v-model.number="num2" placeholder="Digite um valor númerico" class="form-control">
+        </div>
+      </div>
+    </form>
+    <div class="row mb-4 mt-4 ">
+      <p>O resultado da operação é: {{ resultado }} </p>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <TheWelcome />
-  </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
+  .container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #57b5eb;
+    border-radius: 10px;
+  }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
   header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    color: blue;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  p {
+    font-weight: bold;
   }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
